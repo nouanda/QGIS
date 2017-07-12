@@ -2188,3 +2188,13 @@ QMap<QPair<QString, QString>, QgsTransactionGroup*> QgsProject::transactionGroup
 {
   return mTransactionGroups;
 }
+
+QgsTransactionGroup *QgsProject::transactionGroup(const QString &providerKey, const QString &connString)
+{
+    QgsTransactionGroup *transaction = mTransactionGroups.value( qMakePair( providerKey, connString ) );
+
+    if (!transaction)
+        QgsLogger::debug("Unknown transactions group: <" + providerKey + ", " + connString + ">");
+
+    return transaction;
+}

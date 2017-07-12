@@ -59,6 +59,18 @@ class QgsTransactionGroup : QObject
      * Returns true if there are no layers in this transaction group.
      */
     bool isEmpty() const;
+    
+    /**
+     * Execute Sql on stored transaction if any.
+     * Return error string or empty string if no error.
+     */
+    QString executeSql( const QString& sql);
+    
+    /**
+     * Commit on stored transaction if any.
+     * Return error string or empty string if no error.
+     */
+    QString commit();
 
   signals:
     /**

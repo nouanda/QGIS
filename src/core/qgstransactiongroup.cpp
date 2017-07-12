@@ -179,3 +179,26 @@ QString QgsTransactionGroup::connString() const
 {
   return mConnString;
 }
+
+QString QgsTransactionGroup::executeSql(const QString &sql)
+{
+    if (mTransaction.isNull())
+        return "Transaction group doesn't hold any transaction.";
+
+    QString error;
+    if (!mTransaction->executeSql(sql, error))
+        return error;
+
+    return "";
+}
+
+QString QgsTransactionGroup::commit()
+{
+    if (mTransaction.isNull())
+        return "Transaction group doesn't hold any transaction.";
+
+    QString error;
+    mTransaction->commit(error);
+
+    return error;
+}

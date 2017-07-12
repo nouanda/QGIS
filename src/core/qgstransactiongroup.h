@@ -69,6 +69,18 @@ class CORE_EXPORT QgsTransactionGroup : public QObject
      */
     bool isEmpty() const;
 
+    /**
+     * Execute Sql on stored transaction if any.
+     * Return error string or empty string if no error.
+     */
+    QString executeSql( const QString& sql);
+
+    /**
+     * Commit on stored transaction if any.
+     * Return error string or empty string if no error.
+     */
+    QString commit();
+
   signals:
     /**
      * Will be emitted whenever there is a commit error

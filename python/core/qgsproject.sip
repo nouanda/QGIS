@@ -316,13 +316,20 @@ class QgsProject : QObject
      */
     bool evaluateDefaultValues() const;
 
-
     /**
      * Defines if default values should be evaluated on provider side when requested and not when committed.
      *
      * @note added in 2.16
      */
     void setEvaluateDefaultValues( bool evaluateDefaultValues );
+    
+    /**
+     * Get a transaction group by getting provider & connection string.
+     * providerKey, connString -> transactionGroup
+     *
+     * @note added in 2.18
+     */
+    QgsTransactionGroup* transactionGroup(const QString &providerKey, const QString &connString);
 
   protected:
 

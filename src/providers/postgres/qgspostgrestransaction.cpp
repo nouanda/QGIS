@@ -61,6 +61,7 @@ bool QgsPostgresTransaction::executeSql( const QString &sql, QString &errorMsg )
 {
   if ( !mConn )
   {
+    errorMsg = "No postgres connection.";
     return false;
   }
 
