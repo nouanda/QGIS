@@ -325,6 +325,8 @@ class QgsProject : QObject
     
     /**
      * Get a transaction group by getting provider & connection string.
+     * Returning null pointer if transaction group is not found.
+     * 
      * providerKey, connString -> transactionGroup
      *
      * @note added in 2.18
