@@ -1288,6 +1288,12 @@ void QgsMapCanvas::mousePressEvent( QMouseEvent *e )
 
 void QgsMapCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
+  // Register clicked longitude & latitude to position context scope.
+  QgsPointXY point = getCoordinateTransform()->toMapCoordinates( e->x(), e->y() );
+
+  QgsExpressionContextUtils::setPositionVariable( "click_x", point.x() );
+  QgsExpressionContextUtils::setPositionVariable( "click_y", point.y() );
+
   //use middle mouse button for panning, map tools won't receive any events in that case
   if ( e->button() == Qt::MidButton )
   {
