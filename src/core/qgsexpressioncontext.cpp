@@ -1179,3 +1179,20 @@ bool QgsScopedExpressionFunction::isStatic( const QgsExpressionNodeFunction *nod
 {
   return allParamsStatic( node, parent, context );
 }
+
+static QMap<QString, QVariant> sPositionVariables;
+
+QgsExpressionContextScope *QgsExpressionContextUtils::positionScope()
+{
+  QgsExpressionContextScope *scope = new QgsExpressionContextScope( QObject::tr( "Position" ) );
+
+  for ( QMap<QString, QVariant>::const_iterator i = sPositionVariables.begin() ; i != sPositionVariables.end() ; i++ )
+    scope->setVariable( i.key(), i.value() );
+
+  return scope;
+}
+
+void QgsExpressionContextUtils::setPositionVariable( const QString &name, const QVariant &value )
+{
+  sPositionVariables[name] = value;
+}
