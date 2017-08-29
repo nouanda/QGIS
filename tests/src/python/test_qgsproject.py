@@ -49,6 +49,11 @@ class TestQgsProject(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
         self.messageCaught = False
 
+    def setUpClass(cls):
+        cls.dbconn = 'dbname=\'qgis_test\''
+        if 'QGIS_PGTEST_DB' in os.environ:
+            cls.dbconn = os.environ['QGIS_PGTEST_DB']
+
     def test_makeKeyTokens_(self):
         # see http://www.w3.org/TR/REC-xml/#d0e804 for a list of valid characters
 
