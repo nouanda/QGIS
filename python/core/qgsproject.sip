@@ -498,6 +498,15 @@ Convenience function to query topological editing status
 .. versionadded:: 2.16
 %End
 
+    QgsTransactionGroup* transactionGroup(const QString &providerKey, const QString &connString);
+%Docstring
+ Get a transaction group by getting provider & connection string.
+ Returns null pointer if transaction group is not available.
+
+ providerKey, connString -> transactionGroup
+
+.. versionadded:: 3.0
+%End
 
     bool evaluateDefaultValues() const;
 %Docstring
@@ -610,6 +619,12 @@ Returns the number of registered layers.
 .. seealso:: mapLayersByName()
 .. seealso:: layers()
  :rtype: QMap<str, QgsMapLayer *>
+%End
+
+    bool isZipped() const;
+%Docstring
+ Returns true if the project comes from a zip archive, false otherwise.
+ :rtype: bool
 %End
 
 
@@ -771,6 +786,14 @@ Returns the number of registered layers.
  with any changes in the datasource.
 .. seealso:: QgsMapLayer.reload()
 %End
+
+    QgsCoordinateReferenceSystem defaultCrsForNewLayers() const;
+%Docstring
+ Returns the default CRS for new layers based on the settings and
+ the current project CRS
+ :rtype: QgsCoordinateReferenceSystem
+%End
+
 
   signals:
     void readProject( const QDomDocument & );
@@ -1003,6 +1026,8 @@ emitted whenever the configuration for snapping has changed
 
  \param layers List of QgsMapLayer which were added to the legend.
 %End
+
+
 
   public slots:
 

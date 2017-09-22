@@ -40,6 +40,7 @@
 #include "qgsprojectproperty.h"
 #include "qgsmaplayer.h"
 #include "qgsmaplayerstore.h"
+#include "qgsarchive.h"
 
 class QFileInfo;
 class QDomDocument;
@@ -471,12 +472,21 @@ class CORE_EXPORT QgsProject : public QObject, public QgsExpressionContextGenera
     QMap< QPair< QString, QString>, QgsTransactionGroup *> transactionGroups() SIP_SKIP;
 
     /**
+     * Get a transaction group by getting provider & connection string.
+     * Returns null pointer if transaction group is not available.
+     *
+     * providerKey, connString -> transactionGroup
+     *
+     * \since QGIS 3.0
+     */
+    QgsTransactionGroup *transactionGroup( const QString &providerKey, const QString &connString );
+
+    /**
      * Should default values be evaluated on provider side when requested and not when committed.
      *
      * \since QGIS 2.16
      */
     bool evaluateDefaultValues() const;
-
 
     /**
      * Defines if default values should be evaluated on provider side when requested and not when committed.
@@ -574,6 +584,11 @@ class CORE_EXPORT QgsProject : public QObject, public QgsExpressionContextGenera
      * \see layers()
      */
     QMap<QString, QgsMapLayer *> mapLayers() const;
+
+    /**
+     * Returns true if the project comes from a zip archive, false otherwise.
+     */
+    bool isZipped() const;
 
 #ifndef SIP_RUN
 
@@ -743,6 +758,12 @@ class CORE_EXPORT QgsProject : public QObject, public QgsExpressionContextGenera
      * \see QgsMapLayer::reload()
      */
     void reloadAllLayers();
+
+    /** Returns the default CRS for new layers based on the settings and
+     * the current project CRS
+     */
+    QgsCoordinateReferenceSystem defaultCrsForNewLayers() const;
+
 
   signals:
     //! emitted when project is being read
@@ -961,6 +982,8 @@ class CORE_EXPORT QgsProject : public QObject, public QgsExpressionContextGenera
      */
     void legendLayersAdded( const QList<QgsMapLayer *> &layers );
 
+
+
   public slots:
 
     /**
@@ -1016,6 +1039,18 @@ class CORE_EXPORT QgsProject : public QObject, public QgsExpressionContextGenera
     //! \note not available in Python bindings
     void loadEmbeddedNodes( QgsLayerTreeGroup *group ) SIP_SKIP;
 
+    //! Read .qgs file
+    bool readProjectFile( const QString &filename );
+
+    //! Write .qgs file
+    bool writeProjectFile( const QString &filename );
+
+    //! Unzip .qgz file then read embedded .qgs file
+    bool unzip( const QString &filename );
+
+    //! Zip project
+    bool zip( const QString &filename );
+
     std::unique_ptr< QgsMapLayerStore > mLayerStore;
 
     QString mErrorMessage;
@@ -1047,6 +1082,8 @@ class CORE_EXPORT QgsProject : public QObject, public QgsExpressionContextGenera
     std::unique_ptr<QgsLabelingEngineSettings> mLabelingEngineSettings;
 
     QVariantMap mCustomVariables;
+
+    std::unique_ptr<QgsProjectArchive> mArchive;
 
     QFile mFile;                 // current physical project file
     mutable QgsProjectPropertyKey mProperties;  // property hierarchy, TODO: this shouldn't be mutable
