@@ -49,6 +49,7 @@ class TestQgsProject(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
         self.messageCaught = False
 
+    @classmethod
     def setUpClass(cls):
         cls.dbconn = 'dbname=\'qgis_test\''
         if 'QGIS_PGTEST_DB' in os.environ:
